@@ -1,0 +1,85 @@
+数据格式要求如下：
+
+1.summary1.html(总体视图)
+grid展现： "http://9.181.142.107:8082/FinalDemo/AndroidController?flag=view"
+
+
+数据格式：{"identifier": "idd", "items": [
+{"nick":"点亮祝福","text":"#明星题材#海洋工程概念涉及股票：海油工程、广船国际、中集集团、振华重工、中国船舶、杰瑞股份、宝德股份、中海油服、山东墨龙。",time:"2013 04 12 19:49:37"},
+{"nick":"点亮祝福","text":"#明星题材#海洋工程概念涉及股票：海油工程、广船国际、中集集团、振华重工、中国船舶、杰瑞股份、宝德股份、中海油服、山东墨龙。",time:"2013 04 12 19:49:37"}
+]}
+
+
+
+2.sentiment1.html(情感分析)
+pieChart展现："http://9.181.142.107:8082/FinalDemo/AndroidController?flag=analysis&keyWord=sentiment&load=true"
+
+数据格式：{totalResultsCount:8443565,
+company:[{label: "正面",legendEntry: true,data: 5.6}, 
+				{label: "中性",legendEntry: true,data: 56.36},
+				{label: "负面",legendEntry: true,data: 16.67}],
+industry:[{ label: "正面", legendEntry: true, data: 30}, 
+				{label: "中性", legendEntry: true, data: 12}, 
+				{ label: "一般", legendEntry: true, data: 6}]}
+sentiment2.html(相应情感情况)
+grid展现："http://9.181.142.107:8082/FinalDemo/AndroidController?flag=analysis&keyWord=sentiment&load=false&emotion=正面"
+
+数据格式：{"identifier": "idd", "items": [
+{"nick":"点亮祝福","text":"#明星题材#海洋工程概念涉及股票：海油工程、广船国际、中集集团、振华重工、中国船舶、杰瑞股份、宝德股份、中海油服、山东墨龙。",time:"2013 04 12 19:49:37"},
+{"nick":"点亮祝福","text":"#明星题材#海洋工程概念涉及股票：海油工程、广船国际、中集集团、振华重工、中国船舶、杰瑞股份、宝德股份、中海油服、山东墨龙。",time:"2013 04 12 19:49:37"}
+]}
+
+
+3.location1.html(地区分析)
+map展现："http://9.181.142.107:8082/FinalDemo/AndroidController?flag=analysis&keyWord=location&load=true"
+
+数据格式：{'内蒙古':'150','甘肃':30,'河南':230,'广州':300,'上海':460,'深圳':370, '北京':490}
+
+location2.html(相应地区情况)
+grid展现："http://9.181.142.107:8082/FinalDemo/AndroidController?flag=analysis&keyWord=location&load=false&location=广东"
+
+数据格式：{"identifier": "idd", "items": [
+{"nick":"点亮祝福","text":"#明星题材#海洋工程概念涉及股票：海油工程、广船国际、中集集团、振华重工、中国船舶、杰瑞股份、宝德股份、中海油服、山东墨龙。",time:"2013 04 12 19:49:37"},
+{"nick":"点亮祝福","text":"#明星题材#海洋工程概念涉及股票：海油工程、广船国际、中集集团、振华重工、中国船舶、杰瑞股份、宝德股份、中海油服、山东墨龙。",time:"2013 04 12 19:49:37"}
+]}
+
+
+4.tendency1.html(趋势分析)
+lineChart展现："http://9.181.142.107:8082/FinalDemo/AndroidController?flag=analysis&keyWord=tendency&load=true"
+数据格式：{all:{x:["1月","2月","3月","4月","5月","6月","7月","8月","9月"],y:[10,20,30,40,50,60,70,80]},
+	 negative: {x:["1月","2月","3月","4月","5月","6月","7月","8月","9月"],y:[1,2,3,4,5,6,7,8]},
+	 positive:{x:["1月","2月","3月","4月","5月","6月","7月","8月","9月"],y:[2,3,4,5,6,7,8,9]},
+ 	 netual:{x:["1月","2月","3月","4月","5月","6月","7月","8月","9月"],y:[3,4,5,6,7,8,9,10]}}
+
+tendency2.html(相应月的情况)
+grid展现："http://9.181.142.107:8082/FinalDemo/AndroidController?flag=analysis&keyWord=tendency&load=false&month=5月"
+
+数据格式：{"identifier": "idd", "items": [
+{"nick":"点亮祝福","text":"#明星题材#海洋工程概念涉及股票：海油工程、广船国际、中集集团、振华重工、中国船舶、杰瑞股份、宝德股份、中海油服、山东墨龙。",time:"2013 04 12 19:49:37"},
+{"nick":"点亮祝福","text":"#明星题材#海洋工程概念涉及股票：海油工程、广船国际、中集集团、振华重工、中国船舶、杰瑞股份、宝德股份、中海油服、山东墨龙。",time:"2013 04 12 19:49:37"}
+]}
+
+
+5.topic1.html（主题分析）
+bubbleChart展现："http://9.181.142.107:8082/FinalDemo/AndroidController?flag=analysis&keyWord=topic&load=true"
+
+数据格式：{信用卡:{ x: ["第一季度", "第二季度","第三季度"],y: [5, 6, 8], y1: [5, 6, 8]},
+	 网上银行:  {  x: ["第一季度", "第二季度","第三季度"],y: [3, 4, 6], y1: [2, 2.5, 3]},
+	 贷款额度:{x: ["第一季度", "第二季度","第三季度"],y: [4, 5, 6.5], y1: [2, 2.5, 4.5]}}
+
+topic2.html(相应主题的情况)
+grid展现："http://9.181.142.107:8082/FinalDemo/AndroidController?flag=analysis&keyWord=topic&load=false&topic='贷款额度'&quarter='第一季度'"
+数据格式：{"identifier": "idd", "items": [
+{"nick":"点亮祝福","text":"#明星题材#海洋工程概念涉及股票：海油工程、广船国际、中集集团、振华重工、中国船舶、杰瑞股份、宝德股份、中海油服、山东墨龙。",time:"2013 04 12 19:49:37"},
+{"nick":"点亮祝福","text":"#明星题材#海洋工程概念涉及股票：海油工程、广船国际、中集集团、振华重工、中国船舶、杰瑞股份、宝德股份、中海油服、山东墨龙。",time:"2013 04 12 19:49:37"}
+]}
+
+6.service1.hml（服务）
+grid展现："http://9.181.142.107:8082/FinalDemo/AndroidController?flag=service&load=true"
+数据格式：{"identifier": "idd", "items": [
+{"nick":"点亮祝福","text":"#明星题材#海洋工程概念涉及股票：海油工程、广船国际、中集集团、振华重工、中国船舶、杰瑞股份、宝德股份、中海油服、山东墨龙。",time:"2013 04 12 19:49:37"},
+{"nick":"点亮祝福","text":"#明星题材#海洋工程概念涉及股票：海油工程、广船国际、中集集团、振华重工、中国船舶、杰瑞股份、宝德股份、中海油服、山东墨龙。",time:"2013 04 12 19:49:37"}
+]}
+
+提交内容："http://9.181.142.107:8082/FinalDemo/AndroidController?flag=service&load=false&id="微博ID"&content="回复内容""
+

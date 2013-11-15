@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+学习方法总结：
+准备：调试运行Demo程序
+模仿：1.做好简单的布局 2.根据思路依次写脚本语句
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Slides-Phone</title>
+    <link href="css/jquery.mobile-1.3.1.css" rel="stylesheet" type="text/css" />
+    <!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.css" />-->
+
+    <script src="js/jquery-1.7.1.js" type="text/javascript"></script>
+
+    <script src="js/jquery.mobile-1.1.0.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            /*******前进,后退,主页,尾页*******/
+            var goBack = function() {
+            if ($.mobile.activePage.next(':jqmData(role=page)').length > 0) {
+                //先获取活动页面的下一页（筛选符合role=page）,并设置相应的过度效果
+                    $.mobile.changePage($.mobile.activePage.next(':jqmData(role=page)'), { transition: $.mobile.activePage.next(':jqmData(role=page)').jqmData('transition') });
+                }
+            }
+
+            var goForward = function() {
+                if ($.mobile.activePage.prev(':jqmData(role=page)').length > 0) {
+                    $.mobile.changePage($.mobile.activePage.prev(':jqmData(role=page)'), { transition: $.mobile.activePage.prev(':jqmData(role=page)').jqmData('transition') });
+                }
+            }
+            var goHome = function() {
+                if ($(':jqmData(role=page):first').length > 0) {
+                    $.mobile.changePage($(':jqmData(role=page):first'));
+                }
+            }
+
+            var goLast = function() {
+                if ($(':jqmData(role=page):last').length > 0) {
+                    $.mobile.changePage($(':jqmData(role=page):last'));
+                }
+            }
+            /*******end*******/
+
+            /*******注册键盘和滑动事件*******/
+            $(document).keydown(function(e) {
+                if (e.keyCode == 39) {
+                    goForward();
+                } else if (e.keyCode == 37) {
+                    goBack();
+                }
+            }).bind("swiperight", goBack)   //goBack函数必须要放在此之前声明
+        .bind("swipeleft", goForward);
+            /*******end*******/
+
+            /*******延迟加载图片*******/
+            //待续.....
+            /*******end*******/
+
+            /*******优化页面*******/
+            //待续.....
+            /*******end*******/
+        });
+    </script>
+
+</head>
+<body>
+    <div data-role="page" id="slide1" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>
+                slide1</h1>
+        </div>
+        <div data-role="content">
+            <img src="images/陈大师_small.png" />
+            <h1>
+                slide1
+            </h1>
+            <p>
+            content content content content content content content content content content
+            content content content content content content content content content content
+            content content content content content content content content content content
+            content content content content content content content content content content
+            content content content content content content content content content content
+            content content content content content content content content content content
+            content content content content content content content content content content
+            content content content
+        </div>
+        <div data-role="footer" data-position="fixed">
+            <h4>
+                Footer1</h4>
+        </div>
+    </div>
+    <div data-role="page" id="slide2" data-theme="c">
+        <div data-role="header" data-position="fixed">
+            <h1>
+                slide2</h1>
+        </div>
+        <div data-role="content">
+            <img src="images/陈大师.jpg" />
+            <h1>
+                slide2
+            </h1>
+            <p>
+            content content content content content content content content content content
+            content content content content content content content content content content
+            content content content content content content content content content content
+            content content content content content content content content content content
+            content content content content content content content content content content
+            content content content content content content content content content content
+            content content content content content content content content content content
+            content content content
+        </div>
+        <div data-role="footer" data-position="fixed">
+            <h4>
+                Footer2</h4>
+        </div>
+    </div>
+</body>
+</html>
+

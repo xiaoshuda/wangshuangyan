@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+    <title>Do It</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--jQuery References-->
+<!-- jQuery -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+<!-- Wijmo CSS and script -->
+<link type="text/css" href="http://cdn.wijmo.com/themes/metro/jquery-wijmo.css" rel="stylesheet" title="metro-jqueryui" />
+<link type="text/css" href="http://cdn.wijmo.com/jquery.wijmo-complete.all.2.2.0.min.css" rel="stylesheet" />
+<script type="text/javascript" src="http://cdn.wijmo.com/jquery.wijmo-open.all.2.2.0.min.js"></script>
+<script type="text/javascript" src="http://cdn.wijmo.com/jquery.wijmo-complete.all.2.2.0.min.js"></script>
+<!-- KnockoutJS for MVVM-->
+<script type="text/javascript" src="http://cdn.wijmo.com/external/knockout-2.1.0.js"></script>
+<script type="text/javascript" src="http://cdn.wijmo.com/external/knockout.wijmo.js"></script>
+    <script src="js/knockout.wijmo.js" type="text/javascript"></script>
+<script>
+  
+	//Create ViewModel
+var viewModel = {
+    pageSize: ko.observable(10),
+    pageIndex: ko.observable(0),
+    sortCommand: ko.observable("ProductID asc"),
+    dataRows: ko.observableArray([]),
+    totalRows: ko.observable(0),
+    sorted: function (e, data) {
+        viewModel.sortCommand(data.sortCommand);
+    },
+    paged: function (e, data) {
+        viewModel.pageIndex(data.newPageIndex);
+    },
+    load: function () {
+        $.ajax({
+            url: "http://services.odata.org/Northwind/Northwind.svc/Products",
+            dataType: "jsonp",
+            jsonp: "$callback",
+            data: {
+                $format: "json",
+                $inlinecount: "allpages",
+                $select: "ProductID,ProductName,UnitPrice,UnitsInStock",
+                $orderby: viewModel.sortCommand(),
+                $top: viewModel.pageSize(),
+                $skip: viewModel.pageIndex() * viewModel.pageSize(),
+                "paging[pageIndex]": viewModel.pageIndex(),
+                "paging[pageSize]": viewModel.pageSize()
+            },
+            success: function (result) {
+                var data = result.d.results;
+                var arr = [];
+
+                $.each(data, function (i) {
+                    arr.push(new product(data[i]));
+                });
+                viewModel.totalRows(result.d.__count);
+                viewModel.dataRows(arr);
+            }
+        });
+    }
+
+};
+
+//Class constructor for grid row. Returns observable properties.
+var product = function (data) {
+    return {
+        ProductID: ko.observable(data.ProductID),
+        ProductName: ko.observable(data.ProductName),
+        UnitPrice: ko.observable(data.UnitPrice),
+        UnitsInStock: ko.observable(data.UnitsInStock)
+    };
+};
+
+
+//Bind ViewModel and Event Handlers
+$(document).ready(function () {
+    ko.applyBindings(viewModel);
+    viewModel.load();
+    viewModel.sortCommand.subscribe(function (newValue) {
+        viewModel.load();
+    });
+    viewModel.pageIndex.subscribe(function (newValue) {
+        viewModel.load();
+    });
+    viewModel.pageSize.subscribe(function (newValue) {
+        viewModel.load();
+        $(":wijmo-wijdropdown").wijdropdown("refresh");
+    });
+});
+</script>
+</head>
+<body>
+
+<div data-role="page" data-theme="c">
+
+            <div data-role="content">
+                这是一个默认的空间～可以放置任意默认的东西～
+	 <div class="toolbar">
+<label>Display: </label>
+<select data-bind="value: pageSize, wijdropdown: {}">
+<option value="5">5</option>
+<option value="10">10</option>
+<option value="20">20</option>
+</select>
+</div>
+<table id="dataGrid" data-bind="
+wijgrid: {
+data: dataRows,
+pageSize: pageSize,
+pageIndex: pageIndex,
+totalRows: totalRows,
+allowPaging: true,
+allowSorting: true,
+sorted: sorted,
+pageIndexChanged: paged,
+columns: [
+{ sortDirection: 'ascending', dataType: 'number', dataFormatString: 'n0', headerText: 'ID', width: 60 },
+{ headerText: 'Product' },
+{ dataType: 'currency', headerText: 'Price', width: 100},
+{ dataType: 'number', dataFormatString: 'n0', headerText: 'Units', width: 100}]
+}">
+</table>
+            </div>
+		
+	
+
+</div>
+
+</body>
+</html>

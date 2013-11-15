@@ -1,0 +1,374 @@
+<div data-role="appviewpage" data-title="分析">
+	<div data-role="content">
+	   <div id="summary">
+		<h4>基于社交媒体的总体分析</h4>
+		<div data-role="fieldcontain">
+				<label for="select-choice-1" class="select"><h4>信息类别:</h4></label>
+				<select name="select-choice-1" id="select-choice-1">
+					<option value="standard">微博</option>
+					<option value="rush">论坛</option>			
+				</select>
+		</div>
+		<div>
+			<h4>广发银行：</h4>	
+			<div id="wijpiechart" data-role="wijpiechart" class="ui-widget ui-widget-content ui-corner-all" >
+			</div>
+		</div>
+		<div>
+			<h4>社交媒体信息：</h4>	
+			<table id="wijgrid" style="width: 100%; height: 400px">
+     			</table>
+		</div>
+		
+	   </div>
+
+
+	   <div id="dataDistribution" style="display:none">
+		<div>
+			<h4>数据区域：</h4>	
+			<div id="wijscatterchartDefault" data-role="wijscatterchart" style="width: 100%;height: 400px">
+			</div>
+		</div>
+		<div>
+			<h4>主题数据分布：</h4>	
+			<div id="wijpiechartTopic" data-role="wijpiechart" class="ui-widget ui-widget-content ui-corner-all">
+		</div>
+		</div>
+
+	   </div>
+	   <div id="trendAnalysis" style="display:none">
+		<h4>趋势分析</h4>
+		<div>
+			<h4>各主题趋势分析：</h4>	
+			<div id="wijlinechart" data-role="wijlinechart" class="ui-widget ui-widget-content ui-corner-all" style="width: 100%; height: 475px">
+			</div>
+		</div>
+		<div>
+			<h4>情感走向：</h4>	
+			<div id="wijareachart" data-role="wijlinechart" class="ui-widget ui-widget-content ui-corner-all" style="width: 100%; height: 475px">
+			</div>
+		</div>
+
+	   </div>
+	<div data-role="navbar" data-iconpos="left" data-theme="d">
+	<ul>
+		<li><a href="#"  data-role="button" data-icon="arrow-u" id="first">基于社交媒体的总体分析</a></li>
+		<li><a href="#" data-role="button" data-icon="arrow-u" id="second">数据分布</a></li>
+		<li><a href="#" data-role="button" data-icon="arrow-u" id="third">趋势分析</a></li>
+	</ul>
+	</div>
+	<!--<div data-role="navbar" data-iconpos="left" data-theme="d">
+	<ul>
+		<li><input type="button" data-icon="arrow-u" value="基于社交媒体的总体分析" id="first" /></li>
+		<li><input type="button" data-icon="arrow-u" value="数据分布" id="second" /></li>
+		<li><input type="button" data-icon="arrow-u" value="趋势分析" id="third" /></li>
+	</ul>
+	</div>-->
+
+<!----------------------------华丽丽的分割线------------------------------向后台传递信息，并以barChart/bubbleChart形式展现数据----------------------------->
+		
+<script type="text/javascript">
+$(document).one("wijappviewpageinit", function () {	
+				var data = [{
+					Device: '很好',
+					Percent: 46.78,
+					Offset: 15
+				}, {
+					Device: '还行',
+					Percent: 23.18
+				}, {
+					Device: '一般',
+					Percent: 20.25
+				}, {
+					Device: '不好',
+					Percent: 5.41
+				}, {
+					Device: '非常差',
+					Percent: 3.44
+				}];
+
+				$("#wijpiechart").wijpiechart("beginUpdate");
+				$("#wijpiechart").wijpiechart({
+					dataSource: data,
+					data: {
+						label: { bind: "Device" },
+						value: { bind: "Percent" },
+						offset: { bind: "Offset" }
+					},
+					radius: 140,
+					legend: { visible: true },
+					hint: {
+						content: function () {
+							return this.data.label + " : " + Globalize.format(this.value / this.total, "p2");
+						}
+					},
+					header: {
+						text: "对广发银行产品的总体印象"
+					}
+				});
+				$("#wijpiechart").wijpiechart("endUpdate");
+/*----------------------------华丽丽的分割线-----------------------------------------------------------------------------------------------------------*/
+
+	/*以array的数据填充grid*/
+				$("#wijgrid").wijgrid({
+                			allowSorting: true,
+                			allowPaging: true,
+                			pageSize: 3,
+               				data: [
+                    			[27, 'Canada', 'Adams, Craig', 'RW。。。。。。。。。。。。'],
+                    			[43, 'Canada', 'Boucher, Philippe', 'D。。。。。。。。。', 'R'],
+                    			[24, 'Canada', 'Cooke, Matt', 'LW。。。。。。。。。。', 'L'],
+                    			[87, 'Canada', 'Crosby, Sidney (C)', 'C。。。。。。。。。。', 'L'],
+                    			[1, 'United States', 'Curry, John', 'G。。。。。。。。。。。', 'L'], 
+                			],
+                			columns: [
+                    			{ headerText: "数量" },
+                    			{ headerText: "用户地址" },
+                    			{ headerText: "用户名" },
+                    			{ headerText: "微博内容" }
+                			]
+            			});
+/*----------------------------华丽丽的分割线-----------------------------------------------------------------------------------------------------------*/
+	$("#first").click(function(){
+		$("#dataDistribution").hide();
+		$("#trendAnalysis").hide();
+		$("#summary").show();
+	
+	});	
+
+	$("#second").click(function(){
+		//alert("yes");
+		$("#summary").hide();
+		$("#trendAnalysis").hide();
+		$("#dataDistribution").show();
+				$("#wijscatterchartDefault").wijscatterchart({
+					header: {
+						text: "Height Versus Weight of 72 Individuals by Gender"
+					},
+					axis: {
+						y: {
+							text: "Weight (kg)",
+							labels: {
+								style: {
+									fill: "#7f7f7f",
+									"font-size": 11
+								}
+							},
+							gridMajor: {
+								style: { stroke: "#353539", "stroke-dasharray": "- " }
+							},
+							tickMajor: { position: "outside", style: { stroke: "#7f7f7f"} },
+							tickMinor: { position: "outside", style: { stroke: "#7f7f7f"} }
+						},
+						x: {
+							text: "Height (cm)",
+							labels: {
+								style: {
+									fill: "#7f7f7f",
+									"font-size": 11,
+									rotation: -45
+								}
+							},
+							tickMajor: { position: "outside", style: { stroke: "#7f7f7f"} }
+						}
+					},
+					showChartLabels: true,
+					hint: {
+						content: function () {
+							return this.x + ' cm, ' + this.y + ' kg'
+						},
+						contentStyle: {
+							"font-size": 10
+						},
+						offsetY: -10
+					},
+					legend: {
+						visible: false
+					},
+					seriesList: [
+					{
+						label: "Female",
+						legendEntry: true,
+						data: {
+							x: [161.4, 169.0, 166.2, 159.4, 162.5, 159.0, 162.8, 159.0, 179.8, 162.9, 161.0, 151.1, 168.2, 168.9, 173.2,
+								174.0, 162.6, 174.0, 162.6, 161.3, 156.2, 149.9, 169.5, 160.0, 175.3, 169.5, 160.0, 172.7, 162.6, 157.5,
+								176.5, 164.4, 160.7, 174.0, 163.8],
+							y: [63.4, 58.2, 58.6, 45.7, 52.2, 48.6, 57.8, 55.6, 66.8, 59.4, 53.6, 73.2, 53.4, 69.0, 58.4,
+								73.6, 61.4, 55.5, 63.6, 60.9, 60.0, 46.8, 57.3, 64.1, 63.6, 67.3, 75.5, 68.2, 61.4, 76.8,
+								71.8, 55.5, 48.6, 66.4, 67.3]
+						},
+						visible: true,
+						markerType: "circle"
+					}, {
+						label: "Male",
+						legendEntry: true,
+						data: {
+							x: [175.0, 174.0, 165.1, 177.0, 192.0, 176.5, 169.4, 182.1, 179.8, 175.3, 184.9, 177.3, 167.4, 178.1, 168.9,
+								174.0, 167.6, 170.2, 167.6, 188.0, 174.0, 176.5, 180.3, 167.6, 188.0, 180.3, 167.6, 183.0, 183.0, 179.1,
+								170.2, 177.8, 179.1, 190.5, 177.8, 180.3, 180.3
+							],
+							y: [70.2, 73.4, 70.5, 68.9, 102.3, 68.4, 65.9, 75.7, 84.5, 87.7, 86.4, 73.2, 53.9, 72.0, 55.5,
+								70.9, 64.5, 77.3, 72.3, 87.3, 80.0, 82.3, 73.6, 74.1, 85.9, 73.2, 76.3, 65.9, 90.9, 89.1,
+								62.3, 82.7, 79.1, 98.2, 84.1, 83.2, 83.2
+							]
+						},
+						visible: true,
+						markerType: "diamond"
+					}
+				],
+					seriesStyles: [{
+						fill: "#afe500",
+						stroke: "#afe500"
+					}, {
+						fill: "#ff9900",
+						stroke: "#ff9900"
+					}
+				]
+				});
+/*----------------------------华丽丽的分割线-----------------------------------------------------------------------------------------------------------*/
+
+			$("#wijpiechartTopic").wijpiechart("beginUpdate");
+				$("#wijpiechartTopic").wijpiechart({
+					radius: 140,
+					innerRadius: 40,
+					showChartLabels: false,
+					hint: {
+						content: function () {
+							return this.data.label + " : " + Globalize.format(this.value / this.total, "p2");
+						}
+					},
+					legend: {
+						text: "May 2009 - May 2010"
+					},
+					header: {
+						text: "Steam - DX10/11 Systems (Vista/Win7 + DX10/11 GPU)"
+					},
+					seriesList: [{
+						label: "DX11GPU & WIN7",
+						legendEntry: true,
+						data: 5.6,
+						offset: 30
+					}, {
+						label: "DX10GPU & WIN7",
+						legendEntry: true,
+						data: 56.36,
+						offset: 0
+					}, {
+						label: "DX10/11GPU & XP",
+						legendEntry: true,
+						data: 16.67,
+						offset: 0
+					}, {
+						label: "DX9 SM2b & 3.0",
+						legendEntry: true,
+						data: 11.77,
+						offset: 0
+					}, {
+						label: "DX9 SM 2 GPU",
+						legendEntry: true,
+						data: 4.34,
+						offset: 0
+					}, {
+						label: "DX8 GPU & BELOW",
+						legendEntry: true,
+						data: 5.13,
+						offset: 0
+					}]
+				});
+				$("#wijpiechartTopic").wijpiechart("endUpdate");
+	
+	});
+
+	$("#third").click(function(){
+		//alert("yes");
+		$("#summary").hide();
+		$("#dataDistribution").hide();
+		$("#trendAnalysis").show();
+		$("#wijlinechart").wijlinechart("beginUpdate");
+				$("#wijlinechart").wijlinechart({
+					showChartLabels: false,
+					header: {
+						text: "Twitter trends in October 2010"
+					},
+					hint: {
+						content: function () {
+							return this.y;
+						},
+						offsetY: -10
+					},
+					seriesList: [{
+						label: "#Wijmo",
+						legendEntry: true,
+						data: {
+							x: [new Date("10/21/2010"), new Date("10/22/2010"), new Date("10/23/2010"), new Date("10/24/2010"), new Date("10/25/2010"), new Date("10/26/2010"), new Date("10/27/2010"), new Date("10/28/2010"), new Date("10/29/2010")],
+							y: [12, 30, 6, 22, 14, 25, 41, 14, 3]
+						},
+						markers: {
+							visible: true,
+							type: "circle",
+							symbol: [{
+								index: 6,
+								url: "http://cdn.wijmo.com/images/wijmo.png",
+								width: 30,
+								height: 30 
+							}, {
+								index: 2,
+								url: "http://cdn.wijmo.com/images/hatemo.png",
+								width: 30,
+								height: 30
+							}]
+						}
+					}],
+					seriesStyles: [{
+						stroke: "#00a6dd", "stroke-width": 5, opacity: 0.8
+					}],
+					seriesHoverStyles: [{
+						"stroke-width": 8, opacity: 1
+					}]
+				});
+				$("#wijlinechart").wijlinechart("endUpdate");
+
+/*----------------------------华丽丽的分割线-----------------------------------------------------------------------------------------------------------*/
+		
+			$("#wijareachart").wijlinechart("beginUpdate");
+				$("#wijareachart").wijlinechart({
+					type: "area",
+					showChartLabels: false,
+					header: {
+						text: "Twitter trends in October 2010"
+					},
+					hint: {
+						content: function () {
+							return this.y;
+						},
+						offsetY: -10
+					},
+					seriesList: [
+					{
+						label: "#Wijmo",
+						fitType: "spline",
+						legendEntry: true,
+						data: {
+							x: [new Date("10/21/2010"), new Date("10/22/2010"), new Date("10/23/2010"), new Date("10/24/2010"), new Date("10/25/2010"), new Date("10/26/2010"), new Date("10/27/2010"), new Date("10/28/2010"), new Date("10/29/2010")],
+							y: [12, 30, 6, 22, 14, 25, 41, 14, 3]
+						}
+					}
+				],
+					seriesStyles: [{
+						stroke: "#00a6dd", "stroke-width": 5, opacity: 0.8
+					}],
+					seriesHoverStyles: [{
+						"stroke-width": 8, opacity: 1
+					}]
+				});
+				$("#wijareachart").wijlinechart("endUpdate");
+
+	
+	});	
+	
+
+			});
+
+</script>
+	</div>
+</div>

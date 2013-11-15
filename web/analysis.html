@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>分析页面</title>
+	<link rel="stylesheet" media="all" href="css/jquery-jvectormap.css"/>
+	<link rel="stylesheet" type="text/css" href="css/smint.css" >
+	<link class="include" rel="stylesheet" type="text/css" href="css/jquery.jqplot.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui-1.10.3.custom.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="css/ui.jqgrid.css" />
+
+	<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+	<script type="text/javascript" src="js/jquery.smint.js"></script>
+	<script src="js/jquery-jvectormap.js"></script>
+	<script src="js/jquery-mousewheel.js"></script>
+	
+	<script src="js/lib/jvectormap.js"></script>
+  <script src="js/lib/abstract-element.js"></script>
+  <script src="js/lib/abstract-canvas-element.js"></script>
+  <script src="js/lib/abstract-shape-element.js"></script>
+  <script src="js/lib/svg-element.js"></script>
+  <script src="js/lib/svg-group-element.js"></script>
+  <script src="js/lib/svg-canvas-element.js"></script>
+  <script src="js/lib/svg-shape-element.js"></script>
+  <script src="js/lib/svg-path-element.js"></script>
+  <script src="js/lib/svg-circle-element.js"></script>
+  <script src="js/lib/vml-element.js"></script>
+  <script src="js/lib/vml-group-element.js"></script>
+  <script src="js/lib/vml-canvas-element.js"></script>
+  <script src="js/lib/vml-shape-element.js"></script>
+  <script src="js/lib/vml-path-element.js"></script>
+  <script src="js/lib/vml-circle-element.js"></script>
+  <script src="js/lib/vector-canvas.js"></script>
+  <script src="js/lib/simple-scale.js"></script>
+  <script src="js/lib/numeric-scale.js"></script>
+  <script src="js/lib/ordinal-scale.js"></script>
+  <script src="js/lib/color-scale.js"></script>
+  <script src="js/lib/data-series.js"></script>
+  <script src="js/lib/proj.js"></script>
+  <script src="js/lib/world-map.js"></script>
+ 
+	<script src="js/jquery-jvectormap-cn-mill-en.js"></script>
+        <script type="text/javascript" src="js/jquery.jqGrid.min.js" ></script>	
+	<script src="js/i18n/grid.locale-cn.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	    jQuery.jgrid.no_legacy_api = true;
+	</script>
+
+	<script class="include" type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+	<script class="include" language="javascript" type="text/javascript" src="js/jqplot.pieRenderer.min.js"></script>
+	<script class="include" language="javascript" type="text/javascript" src="js/jqplot.donutRenderer.min.js"></script>
+	<script class="include" type="text/javascript" src="js/jqplot.highlighter.min.js"></script>
+	<script class="include" type="text/javascript" src="js/jqplot.barRenderer.min.js"></script>
+	<script class="include" type="text/javascript" src="js/jqplot.categoryAxisRenderer.min.js"></script>
+	<script class="include" type="text/javascript" src="js/jqplot.pointLabels.min.js"></script>
+	<script class="include" type="text/javascript" src="js/jqplot.dateAxisRenderer.min.js"></script>
+	<script class="include" type="text/javascript" src="js/jqplot.logAxisRenderer.min.js"></script>
+	<script class="include" type="text/javascript" src="js/jqplot.canvasTextRenderer.min.js"></script>
+	<script class="include" type="text/javascript" src="js/jqplot.canvasAxisTickRenderer.min.js"></script>
+	   	  
+	<style>
+		.jvm-legend-item {
+		width: 1.5em;
+		height: 1.5em;
+		display: inline-block;
+		margin-left: 10px;
+		}
+	</style>
+
+         <!--设置悬浮导航栏滑动速度-->
+	<script type="text/javascript">	
+		$(document).ready( function() {
+		    $('.subMenu').smint({
+		    	'scrollSpeed' : 1000
+		    });
+		});
+	</script>
+
+        <!--实现点击home图片回到导航页面-->
+	<script type="text/javascript">
+		 function trans() {
+		   window.location.href='index.html';
+		};
+	</script>
+       <!--地点与编码对照表（js文件只有编码，要把编码对应显示到具体地点）-->
+	 <script>
+		var provinceMap = {
+			'西藏':'CN-54',
+			'广州':'CN-52',
+			'福建':'CN-35',
+			'重庆':'CN-50',
+			'四川':'CN-51',
+			'上海':'CN-31',
+			'江苏':'CN-32',
+			'浙江':'CN-33',
+			'山西':'CN-14',
+			'内蒙古':'CN-15',
+			'天津':'CN-12',
+			'河北':'CN-13',
+			'北京':'CN-11',
+			'安徽':'CN-34',
+			'云南':'CN-53',
+			'江西':'CN-36',
+			'山东':'CN-37',
+			'河南':'CN-41',
+			'湖南':'CN-43',
+			'湖北':'CN-42',
+			'广西':'CN-45',
+			'广东':'CN-44',
+			'海南':'CN-46',
+			'新疆':'CN-65',
+			'宁夏':'CN-64',
+			'青海':'CN-63',
+			'甘肃':'CN-62',
+			'陕西':'CN-61',
+			'黑龙江':'CN-23',
+			'吉林':'CN-22',
+			'辽宁':'CN-21'
+		};
+                //导入地点数据，并对数据情况进行分类显示
+		//jQuery(function(){
+		$(document).ready(function(){
+                  $.jqplot._noToImageButton = true;
+			$.ajax({
+			    url:'data.html',
+				//url:'../Controller',
+			    type:'POST',
+		            data:{'flag':'analysis','load':'t','mapData':'t'},
+                            dataType:'text',
+			    //data:{'order':'getMapData'},
+			    success:function(data, textStatus, jqXHR){
+				eval('var objData = '+ data);
+				mapObj = objData['mapData'];
+				pieObj = objData['pieData'];
+				trendObj = objData['trendData'];
+				barObj = objData['barData'];
+				var param = {};
+				for(var name in mapObj){
+				    var provinceCode = provinceMap[name];
+				    if(mapObj[name] >= 400){
+				        param[provinceCode] = 5;
+				    }else if(mapObj[name] >= 300){
+				        param[provinceCode] = 4;
+				    }else if(mapObj[name] >= 200){
+				        param[provinceCode] = 3;
+				    }else if(mapObj[name] >= 100){
+				        param[provinceCode] = 2;
+				    }else{
+				        param[provinceCode] = 1;
+				    }
+		        }
+                       //把数据分成5种情况，并用5种颜色进行显示
+		        $('#map1').vectorMap({
+		            map: 'cn_mill_en',
+		            series: {
+		                regions: [{
+		                    scale: {
+		                        '1': '#66b361',
+		                        '2': '#7f9a2b',
+		                        '3': '#b3b23c',
+		                        '4': '#b36b25',
+		                        '5': '#b30507'
+		                    },
+		                    attribute: 'fill',
+		                    values: param
+		                }]
+		            },
+                       //设置选中地点颜色
+		            regionStyle:{
+		                selected: {
+		                    fill: '#499dc3'
+		                }
+		            },
+                        //当鼠标放在某一地点时显示该地点名称并显示评论数
+		            onRegionLabelShow: function(event, label, code){
+		                var currentName = '';
+		                var currentNum = 0;
+		                for(var name in provinceMap){
+		                    if(code == provinceMap[name]){
+		                        currentName = name;
+		                        break;
+		                    }
+		                }
+		                if(typeof(mapObj[name]) != 'undefined'){
+		                    currentNum = mapObj[name];
+		                }
+		                label.html(
+		                        currentName + ' ' +
+		                        '评论数：' + currentNum
+		                );
+		            },
+		            regionsSelectable:true,
+		            regionsSelectableOne:true,
+   			//点击某一地点时显示该地点的具体评论内容
+		            onRegionSelected:function(event,code,isSelected,selectedRegions){
+		            	 var currentName = '';
+		            	 if(isSelected==true){
+		            	for(var name in provinceMap){
+		                    if(code == provinceMap[name]){
+		                        currentName = name;
+		                        break;
+		                    }
+		                }
+		            	   
+		                $.ajax({
+		                    url:'weibo.html',
+					//url:'../Controller',
+		                    type:'POST',
+				   data:{'flag':'analysis','load':'f','mapData':'t','pieData':'f','trendData':'f','barData':'f','location':currentName},
+                                    dataType:'text',
+		                   // data:{'location':currentName},
+		                    success:function (data, textStatus, jqXHR){
+		                        eval('var weiboData = '+ data);
+		                        data = weiboData['items'];
+		                        $('#list1').jqGrid('setGridState','visible');
+		                        jQuery('#list1').jqGrid('clearGridData');
+		                        jQuery("#list1").jqGrid('addRowData', 'idd', data);
+		                        //$('#list').jqGrid('trigger','reloadGrid');
+					$("#map").css("display","block");
+		                    }
+		                });
+		            	 } 
+		            }
+		        });
+                  
+                       
+                       
+                       
+		      
+			    var plot1 = jQuery.jqplot ('chart1', [pieObj],
+				{
+				    seriesDefaults: {
+				        // Make this a pie chart.
+				        renderer: jQuery.jqplot.PieRenderer,
+				        rendererOptions: {
+				            // Put data labels on the pie slices.
+				            // By default, labels show the percentage of the slice.
+				            showDataLabels: true
+				        }
+				    },
+				    legend: { show:true, location: 'e' }
+				}
+			    );
+
+			    $('#chart1').bind('jqplotDataClick',
+			        function (ev, seriesIndex, pointIndex, data) {
+				    $.ajax({
+				        url:'weibo.html',
+					//url:'../Controller',
+				        type:'POST',
+                                        data:{'flag':'analysis','load':'f','pieData':'t','mapData':'f','trendData':'f','barData':'f','sentiment':data[0]},
+                                        dataType:'text',
+				        //data:{'pieData':data[0]},
+				        success:function (data, textStatus, jqXHR){
+				            eval('var weiboData = '+ data);
+				            data = weiboData['items'];
+				            $('#list2').jqGrid('setGridState','visible');
+				            jQuery('#list2').jqGrid('clearGridData');
+				            jQuery("#list2").jqGrid('addRowData', 'idd', data);
+				            $("#pie").css("display","block");
+				        }
+				    });
+			        }
+			    );       
+                       
+                       
+          
+			    
+			   
+			    var plot3 = $.jqplot("trend", [trendObj[0],trendObj[1]], {
+
+			        seriesColors: ["rgba(78, 135, 194, 0.7)", "rgb(211, 235, 59)"],
+			       
+			        highlighter: {
+			            show: true,
+			            sizeAdjust: 1,
+			            tooltipOffset: 9
+			        },
+			        grid: {
+			            background: 'rgba(57,57,57,0.0)',
+			            drawBorder: false,
+			            shadow: false,
+			            gridLineColor: '#666666',
+			            gridLineWidth: 2
+			        },
+			        legend: {
+			            show: true,
+			            placement: 'outside'
+			        },
+			        seriesDefaults: {
+			            rendererOptions: {
+			                smooth: true,
+			                animation: {
+			                    show: true
+			                }
+			            },
+			            showMarker: false
+			        },
+			        series: [
+			            {
+			                label: '正面'
+			            },
+			   
+			            {
+					
+			                label: '负面'
+			            }
+			        ],
+			        axesDefaults: {
+			            rendererOptions: {
+			                baselineWidth: 1.5,
+			                baselineColor: '#444444',
+			                drawBaseline: false
+			            }
+			        },
+			        axes: {
+			            xaxis: {
+			                renderer: $.jqplot.DateAxisRenderer,
+			                tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+			                tickOptions: {
+			                    formatString: "%#m月 %#d日",
+			                    angle: -30,
+			                    textColor: '#444444'
+			                },
+			                min: "2011-07-05",
+			                max: "2011-09-05",
+			                tickInterval: "7 days",
+			                drawMajorGridlines: false
+			            },
+			            yaxis: {
+			                renderer: $.jqplot.LinearAxisRenderer,
+			                pad: 0,
+			                
+			                tickOptions: {
+			                    formatString: "数量%'d",
+			                    showMark: false
+			                }
+			            }
+			        }
+			    });  
+			    
+			    
+			    
+			    
+			    
+		       
+		        plot2 = $.jqplot('chart3', [barObj], {
+		            series:[{renderer:$.jqplot.BarRenderer}],
+		            axesDefaults: {
+		                tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+		                tickOptions: {
+		                    angle: -30,
+		                    fontSize: '10pt'
+		                }
+		            },
+		            axes: {
+		                xaxis: {
+		                    renderer: $.jqplot.CategoryAxisRenderer
+		                }
+		            }
+
+		        });
+			$('#chart3').bind('jqplotDataClick',
+    			function (ev, seriesIndex, pointIndex, data) {
+     		 	$.ajax({
+                        url:'weibo.html',
+			//url:'../Controller',
+                        type:'POST',
+			data:{'flag':'analysis','load':'f','barData':'t','pieData':'f','trendData':'f','mapData':'f','corporation':data[0]},
+                        dataType:'text',
+                        //data:{'pieData':data[0]},
+                        success:function (data, textStatus, jqXHR){
+                            eval('var weiboData = '+ data);
+                            data = weiboData['items'];
+                            $('#list3').jqGrid('setGridState','visible');
+                            jQuery('#list3').jqGrid('clearGridData');
+                            jQuery("#list3").jqGrid('addRowData', 'idd', data);
+                            $("#bar").css("display","block");
+                        }
+                    });
+    }
+  ); 
+	
+			    
+			    
+			    
+                       
+		    }
+		});
+	       var data = [];
+		jQuery("#list1").jqGrid({
+		    data: data,
+		   // url:'weibo.html',
+		    datatype: "local",
+		    height: 250,
+		    rowNum: 10,
+		    rowList: [10,20,30],
+		    colNames:['用户', '发言内容'],
+		    colModel:[
+		        //{name:'idd',index:'idd', width:40, sorttype:"int"},
+		        {name:'nick',index:'nick',width:40, sorttype:'text'},
+		       // {name:'source',index:'source', width:100, sorttype:"text"},
+		        {name:'text',index:'text', width:250}
+		    ],
+		    pager: "#pager1",
+		    viewrecords: true,
+		    caption: "数据详情",
+		    hiddengrid:true
+		    //loadonce:true
+		});
+		jQuery("#list1").jqGrid('navGrid','#pager1',{del:false,add:false,edit:false});
+		jQuery("#list2").jqGrid({
+			data: data,
+			//url:'weibo.html',
+			datatype: "local",
+			height: 250,
+			rowNum: 10,
+			rowList: [10,20,30],
+			colNames:['用户','发言内容'],
+			colModel:[
+			   // {name:'idd',index:'idd', width:40, sorttype:"int"},
+			    {name:'nick',index:'nick',width:40, sorttype:'text'},
+			    //{name:'source',index:'source', width:60, sorttype:"text"},
+			    {name:'text',index:'text', width:250}
+			],
+			pager: "#pager2",
+			viewrecords: true,
+			caption: "评价详情",
+			hiddengrid:true
+			//loadonce:true
+		    });
+		    jQuery("#list2").jqGrid('navGrid','#pager2',{del:false,add:false,edit:false});
+  			$('.jqplot-highlighter-tooltip').addClass('ui-corner-all');
+		jQuery("#list3").jqGrid({
+		data: data,
+		//url:'weibo.html',
+		datatype: "local",
+		height: 250,
+		rowNum: 10,
+		rowList: [10,20,30],
+		colNames:['用户', '发言内容'],
+		colModel:[
+		    //{name:'idd',index:'idd', width:40, sorttype:"int"},
+		    {name:'nick',index:'nick',width:40, sorttype:'text'},
+		   // {name:'source',index:'source', width:60, sorttype:"text"},
+		    {name:'text',index:'text', width:250}
+		],
+		pager: "#pager3",
+		viewrecords: true,
+		caption: "评价详情",
+		hiddengrid:true
+		//loadonce:true
+	    });
+	    jQuery("#list3").jqGrid('navGrid','#pager2',{del:false,add:false,edit:false});
+	    })
+	  </script>
+</head>
+
+<body>
+	<div class="wrap" style="z-index:0;padding-top:50px;">
+
+		<div class="subMenu" >		
+	 		<div class="inner">
+				<img onclick="trans()"style="float:left;" src="css/img/home.png"/>
+				<a href="#" id="s1" class="subNavBtn">趋势展现</a>
+				<a href="#" id="s2" class="subNavBtn">情感分析</a>
+				<a href="#" id="s3" class="subNavBtn">地区分布</a>
+				<a href="#" id="s4" class="subNavBtn">热门主题</a>
+				<img class="img1" src="css/img/ibm-logo-white.gif"/>
+			</div>				
+		</div>
+		<div class="section s1">
+			<div class="inner">
+				<h1>发展趋势</h1>
+				<div id="trend" style="height:500px; width:700px;margin-left:250px;"></div>
+			</div>
+		</div>
+		<div class="section s2" >
+		
+			<div  class="inner" >
+				<h1>情感分析</h1>
+				<div id="chart1" style="width:600px;height:500px;float:left;"></div>
+				<div id="pie" style="float:left;margin-left:20px;margin-top:5px;z-index: 100;display:none;">
+		   		<table id="list2"></table>
+		    		<div id="pager2"></div>
+				</div>			
+			</div>
+		</div>
+
+		<div class="section s3">
+			<div class="inner">
+				<h1>地区分布</h1>
+                                <div style="float:left;">			
+	 			<div id="map1" style="width:600px;height:500px;" ></div>
+				<div style="margin-top:5px;line-height: 2em;font-size: 0.5em;">
+					<span style="vertical-align: middle;background-color: #66b361" class="jvm-legend-item"></span>
+					<span style="vertical-align: middle">>0且<=100</span>
+					<span style="vertical-align: middle;background-color: #7f9a2b" class="jvm-legend-item"></span>
+					<span style="vertical-align: middle">>100且<=200</span>
+					<span style="vertical-align: middle;background-color: #b3b23c" class="jvm-legend-item"></span>
+					<span style="vertical-align: middle">>200且<=300</span>
+					<span style="vertical-align: middle;background-color: #b36b25" class="jvm-legend-item"></span>
+					<span style="vertical-align: middle">>300且<=400</span>
+					<span style="vertical-align: middle;background-color: #b30507" class="jvm-legend-item"></span>
+					<span style="vertical-align: middle">>400且<=500</span>
+		    		</div>
+                               </div>
+				<div id="map"style="float:left;margin-left:20px;z-index: 100;display:none;">
+		    		<table id="list1"></table>
+		    		<div id="pager1"></div>
+				</div>
+			</div>
+		</div>
+		
+
+		<div class="section s4">
+			<div class="inner">
+				<h1>热门主题</h1>
+				<div id="chart3" style="float:left;width:600px; height:500px;"></div>
+ 				<div id="bar" style="float:left;margin-left:20px;margin-top:5px;z-index: 100;display:none;">
+		    		<table id="list3"></table>
+		    		<div id="pager3"></div>
+				</div>
+			</div>
+		</div>
+		
+		
+               
+	</div>
+	<script class="code" type="text/javascript">
+		/*$(document).ready(function(){
+		    $.ajax({
+			type:'get',
+			url:'pieData.html',
+		 	data:{'flag':'analysis','load':'t','pieData':'t'},
+                        datatype:'text',
+			//data:{'action':'pieData'},
+			success:function(data, textStatus, jqXHR){
+			 
+				
+				
+			}
+		    });
+
+		    var data = [];
+		    jQuery("#list2").jqGrid({
+			data: data,
+			//url:'weibo.html',
+			datatype: "local",
+			height: 250,
+			rowNum: 10,
+			rowList: [10,20,30],
+			colNames:['Inv No','userName','source', 'text'],
+			colModel:[
+			    {name:'idd',index:'idd', width:40, sorttype:"int"},
+			    {name:'nick',index:'nick',width:60, sorttype:'text'},
+			    {name:'source',index:'source', width:60, sorttype:"text"},
+			    {name:'text',index:'text', width:200}
+			],
+			pager: "#pager2",
+			viewrecords: true,
+			caption: "评价详情",
+			hiddengrid:true
+			//loadonce:true
+		    });
+		    jQuery("#list2").jqGrid('navGrid','#pager2',{del:false,add:false,edit:false});
+		});*/
+	</script>
+
+	<script class="code" type="text/javascript">
+		/*$(document).ready(function () {
+		    //$.jqplot._noToImageButton = true;
+		    $.ajax({
+		    url:'trendData.html',
+		    type:'get',
+		    data:{'flag':'analysis','load':'t','trendData':'t'},
+                    datatype:'text',
+		    //data:{'action':'getBarData'},
+		    success:function(data, textStatus, jqXHR){
+                          eval('var obj = '+data);
+		    var plot1 = $.jqplot("trend", [obj[0],obj[1]], {
+
+		        seriesColors: ["rgba(78, 135, 194, 0.7)", "rgb(211, 235, 59)"],
+		       
+		        highlighter: {
+		            show: true,
+		            sizeAdjust: 1,
+		            tooltipOffset: 9
+		        },
+		        grid: {
+		            background: 'rgba(57,57,57,0.0)',
+		            drawBorder: false,
+		            shadow: false,
+		            gridLineColor: '#666666',
+		            gridLineWidth: 2
+		        },
+		        legend: {
+		            show: true,
+		            placement: 'outside'
+		        },
+		        seriesDefaults: {
+		            rendererOptions: {
+		                smooth: true,
+		                animation: {
+		                    show: true
+		                }
+		            },
+		            showMarker: false
+		        },
+		        series: [
+		            {
+		                label: '正面'
+		            },
+		   
+		            {
+				
+		                label: '负面'
+		            }
+		        ],
+		        axesDefaults: {
+		            rendererOptions: {
+		                baselineWidth: 1.5,
+		                baselineColor: '#444444',
+		                drawBaseline: false
+		            }
+		        },
+		        axes: {
+		            xaxis: {
+		                renderer: $.jqplot.DateAxisRenderer,
+		                tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+		                tickOptions: {
+		                    formatString: "%#m月 %#d日",
+		                    angle: -30,
+		                    textColor: '#444444'
+		                },
+		                min: "2013-07-01",
+		                max: "2013-09-30",
+		                tickInterval: "7 days",
+		                drawMajorGridlines: false
+		            },
+		            yaxis: {
+		                renderer: $.jqplot.LogAxisRenderer,
+		                pad: 0,
+		                rendererOptions: {
+		                    minorTicks: 1
+		                },
+		                tickOptions: {
+		                    formatString: "人数%'d",
+		                    showMark: false
+		                }
+		            }
+		        }
+		    });
+                    }
+                    })
+
+		      $('.jqplot-highlighter-tooltip').addClass('ui-corner-all')
+		});*/
+
+	</script>
+	<script class="code" type="text/javascript">
+	    /*$(document).ready(function(){
+		$.ajax({
+		    url:'barData.html',
+		    type:'get',
+		    data:{'flag':'analysis','load':'t','barData':'t'},
+                    datatype:'text',
+		    //data:{'action':'getBarData'},
+		    success:function(data, textStatus, jqXHR){
+		        eval('var obj = '+data);
+		        plot2 = $.jqplot('chart3', [obj], {
+		            series:[{renderer:$.jqplot.BarRenderer}],
+		            axesDefaults: {
+		                tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+		                tickOptions: {
+		                    angle: -30,
+		                    fontSize: '10pt'
+		                }
+		            },
+		            axes: {
+		                xaxis: {
+		                    renderer: $.jqplot.CategoryAxisRenderer
+		                }
+		            }
+
+		        });
+			$('#chart3').bind('jqplotDataClick',
+    			function (ev, seriesIndex, pointIndex, data) {
+     		 	$.ajax({
+                        url:'weibo.html',
+                        type:'get',
+			data:{'flag':'analysis','load':'f','barData':'t','corporation':data[0]},
+                        datatype:'text',
+                        //data:{'pieData':data[0]},
+                        success:function (data, textStatus, jqXHR){
+                            eval('var weiboData = '+ data);
+                            data = weiboData['items'];
+                            $('#list3').jqGrid('setGridState','visible');
+                            jQuery('#list3').jqGrid('clearGridData');
+                            jQuery("#list3").jqGrid('addRowData', 'idd', data);
+                            $("#bar").css("display","block");
+                        }
+                    });
+    }
+  ); 
+		    }
+		});
+	   
+		var data = [];
+	    	jQuery("#list3").jqGrid({
+		data: data,
+		//url:'weibo.html',
+		datatype: "local",
+		height: 250,
+		rowNum: 10,
+		rowList: [10,20,30],
+		colNames:['Inv No','userName','source', 'text'],
+		colModel:[
+		    {name:'idd',index:'idd', width:40, sorttype:"int"},
+		    {name:'nick',index:'nick',width:60, sorttype:'text'},
+		    {name:'source',index:'source', width:60, sorttype:"text"},
+		    {name:'text',index:'text', width:200}
+		],
+		pager: "#pager3",
+		viewrecords: true,
+		caption: "评价详情",
+		hiddengrid:true
+		//loadonce:true
+	    });
+	    jQuery("#list3").jqGrid('navGrid','#pager2',{del:false,add:false,edit:false});
+	 });*/
+	</script>
+</body>
+</html>

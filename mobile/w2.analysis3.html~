@@ -1,0 +1,103 @@
+<div data-role="appviewpage" data-title="分析">
+	<div data-role="content">
+		<div data-role="fieldcontain">
+				<label for="select-choice-1" class="select"><h4>信息类别:</h4></label>
+				<select name="select-choice-1" id="select-choice-1">
+					<option value="standard">微博</option>
+					<option value="rush">论坛</option>			
+				</select>
+		</div>
+		<div>
+			<h4>广发银行：</h4>	
+			<div id="wijpiechart" data-role="wijpiechart" class="ui-widget ui-widget-content ui-corner-all" >
+			</div>
+		</div>
+		<div>
+			<h4>社交媒体信息：</h4>	
+			<table id="wijgrid" style="width: 100%; height: 400px">
+     			</table>
+		</div>
+		
+	<div data-role="navbar" data-iconpos="left" data-theme="d">
+	<ul>
+		<li><a href="w2.analysis.html" data-icon="arrow-u">基于社交媒体的总体分析</a></li>
+		<li><a href="w2.analysis3.html" data-icon="arrow-u">数据分布</a></li>
+		<li><a href="b.html" data-icon="arrow-u">趋势分析</a></li>
+	</ul>
+	</div>
+
+
+
+
+
+<!----------------------------华丽丽的分割线------------------------------向后台传递信息，并以pieChart和grid形式展现数据----------------------------->
+
+<script type="text/javascript">
+$(document).one("wijappviewpageinit", function () {
+				var data = [{
+					Device: '很好',
+					Percent: 46.78,
+					Offset: 15
+				}, {
+					Device: '还行',
+					Percent: 23.18
+				}, {
+					Device: '一般',
+					Percent: 20.25
+				}, {
+					Device: '不好',
+					Percent: 5.41
+				}, {
+					Device: '非常差',
+					Percent: 3.44
+				}];
+
+				$("#wijpiechart").wijpiechart("beginUpdate");
+				$("#wijpiechart").wijpiechart({
+					dataSource: data,
+					data: {
+						label: { bind: "Device" },
+						value: { bind: "Percent" },
+						offset: { bind: "Offset" }
+					},
+					radius: 140,
+					legend: { visible: true },
+					hint: {
+						content: function () {
+							return this.data.label + " : " + Globalize.format(this.value / this.total, "p2");
+						}
+					},
+					header: {
+						text: "对广发银行产品的总体印象"
+					}
+				});
+				$("#wijpiechart").wijpiechart("endUpdate");
+
+	/*以array的数据填充grid*/
+	$("#wijgrid").wijgrid({
+                allowSorting: true,
+                allowPaging: true,
+                pageSize: 3,
+                data: [
+                    [27, 'Canada', 'Adams, Craig', 'RW。。。。。。。。。。。。'],
+                    [43, 'Canada', 'Boucher, Philippe', 'D。。。。。。。。。', 'R'],
+                    [24, 'Canada', 'Cooke, Matt', 'LW。。。。。。。。。。', 'L'],
+                    [87, 'Canada', 'Crosby, Sidney (C)', 'C。。。。。。。。。。', 'L'],
+                    [1, 'United States', 'Curry, John', 'G。。。。。。。。。。。', 'L'], 
+                ],
+                columns: [
+                    { headerText: "数量" },
+                    { headerText: "用户地址" },
+                    { headerText: "用户名" },
+                    { headerText: "微博内容" }
+                ]
+            });
+
+			});
+
+</script>
+
+
+	</div>
+</div>
+

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>导航主页</title>	
+		<link rel="stylesheet" type="text/css" href="css/style.css" /> 
+		<link rel="stylesheet" type="text/css" href="css/scrollpath.css" />
+		<link rel="stylesheet" href="css/Meny.css">
+		<script type="text/javascript" language="javascript" src="js/jquery-1.8.2.js"></script>
+		<script type="text/javascript" src="js/i18n/prefixfree.min.js"></script>
+		<script type="text/javascript" src="js/i18n/jquery.easing.js"></script>
+		<script type="text/javascript" src="js/jquery.scrollpath.js"></script>
+		<script type="text/javascript" src="js/demo.js"></script>
+		<script src="js/meny.min.js"></script>
+	</head>
+	<body>
+		<div class="meny">
+			<h2>导航</h2>
+			<ul>
+				<li><a href="./configure.html">设置</a></li>
+				<li><a href="./View.html">实时监测</a></li>
+				
+				
+				<li><a href="./analysis.html">分析</a></li>
+				<li><a href="./rank.html">留言排行榜</a></li>
+				<li><a href="./custom-serve.html">客户服务</a></li>
+				<li><a href="./mobile.html">Mobile版本介绍</a></li>
+				<li><a href="./Entity1.html">分词和实体识别</a></li>
+				<li><a href="./filter.html">过滤选择</a></li>			
+			</ul>
+		</div>
+
+		<div class="meny-arrow"></div>
+		<div class="contents" style="background-image:url('css/img/bigdata.jpg') ;text-align:center;">
+		<div style="background-color: #499dc3; height:60px;">
+                   <h3 style="text-align:center;color:white;font-size:22px;">欢迎使用 <span style="float:right;"><img src="css/img/ibm-logo-white.gif"/></span></h3>
+		</div>
+			<nav>
+			<ul>
+				<li><a href="#start">1</a></li>
+				<li><a href="#description">2</a></li>
+				<li><a href="#syntax">3</a></li>
+				<li><a href="#scrollbar">4</a></li>
+				<li><a href="#rotations">5</a></li>
+				<li><a href="#rotations-rotated">6</a></li>
+				<li><a href="#source">7</a></li>
+				<li><a href="#follow">8</a></li>
+			</ul>
+		</nav>
+		<div class="wrapper">
+			<div class="demo">
+				社交网络信息抓取分析工具
+				<p style="font-size:28px;">我知客户心</p>
+			</div>
+			
+			<div class="description">
+				<span class="big">小组成员：宋凯凯，汪翔，易子立,王双燕</span>
+			</div>
+
+			<div class="syntax">
+				<span class="big">设置页面是配置抓取数据的条件</span>
+			</div>
+
+			<div class="scrollbar">
+				<span class="big">视图页面是监视一些关键词</span>
+			</div>
+
+			<div class="rotations">
+				<span class="big">客户服务页面是与一些页面进行互动</span>
+			</div>
+
+			<div class="source">
+				<span class="big">感谢您的时间！</span>
+			</div>
+
+			<div class="follow">
+				<span class="big">如果您有什么疑问或者想联系我们<a href="http://www.ibm.com/cn/zh/">IBM@中国</a>.</span>
+			</div>
+		</div>
+
+			</div>
+		<!--实现导航页面在左边隐藏，鼠标移动到左边时导航自动出现-->
+		
+		<script>
+			// Create an instance of Meny
+			var meny = Meny.create({
+				// The element that will be animated in from off screen
+				menuElement: document.querySelector( '.meny' ),
+
+				// The contents that gets pushed aside while Meny is active
+				contentsElement: document.querySelector( '.contents' ),
+
+				// [optional] The alignment of the menu (top/right/bottom/left)
+				position: Meny.getQuery().p || 'left',
+
+				// [optional] The height of the menu (when using top/bottom position)
+				height: 200,
+
+				// [optional] The width of the menu (when using left/right position)
+				width: 260,
+
+				// [optional] Distance from mouse (in pixels) when menu should open
+				threshold: 40,
+
+				// [optional] Use mouse movement to automatically open/close
+				mouse: true,
+
+				// [optional] Use touch swipe events to open/close
+				touch: true
+			});
+
+			
+			if( Meny.getQuery().u && Meny.getQuery().u.match( /^http/gi ) ) {
+				var contents = document.querySelector( '.contents' );
+				contents.style.padding = '0px';
+				
+			}
+		</script>
+	</body>
+</html>

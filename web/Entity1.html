@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>我们的工作</title>
+
+<link rel="stylesheet" type="text/css" href="css/entity.css" />
+
+<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+<script type="text/javascript" src="js/entitynew.js"></script>
+<script>
+$(document).ready(function(){
+    $.ajax({
+    	 type:"POST",
+        url:"entityData.html",
+         //url:"../Controller",
+	    data:{'flag':'entity'},
+         dataType:'text',
+         success:function(data){
+             eval('var returnData = '+data);
+             var originalHTML = '';
+             var tokenHTML = '';
+            // var object = returnData[8];
+           
+               
+             originalHTML += '<p class="vright">'+ returnData['text'] +'</p>';
+             tokenHTML += returnData['token'] ;
+            
+             $('#original').html(originalHTML);
+             $('#mytext').html(tokenHTML);
+         } 
+    })
+})
+</script>
+</head>
+
+<body>
+<div style="background-color: #499dc3;height:60px;">
+	      <a href="./index.html"><img style="float:left;" src="css/img/home.png"/></a> 
+              <div style="text-align:center;padding-top:12px;font-size:24px;color:white;font-size:22px;">分词和实体识别<span style="float:right;"><img src="css/img/ibm-logo-white.gif"/></span></div>
+	</div>
+<div id="main">
+ <h4>原句展示：</h4>
+ <div id="original" style="color:#770077;"></div>
+  <h4>分词结果：</h4>
+<textarea style="width:900px;heigth:500px;" name="mytext" id = 'mytext'></textarea>
+
+<h4>实体识别：</h4>
+<ul class="tabContainer">
+<!-- The jQuery generated tabs go here -->
+</ul>
+
+<div class="clear"></div>
+
+<div id="tabContent">
+	<div id="contentHolder">
+    	<!-- The AJAX fetched content goes here -->
+    </div>
+</div>
+
+</div>
+
+
+
+
+</body>
+</html>

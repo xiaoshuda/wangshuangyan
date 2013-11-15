@@ -1,0 +1,147 @@
+<div data-role="appviewpage" data-title="设置">
+	<div data-role="content">
+		<!-- Begin demo markup -->
+	<div data-role="wijwizard" data-theme="c">
+			<ul>
+				<li>
+					<h4 style="color:green">源数据配置</h4>
+				</li>
+				<li>
+					<h4>分析配置</h4>
+				</li>
+				<li>
+					<h4>性能配置</h4>
+				</li>
+				<li>
+					<h4>报告配置</h4>
+				</li>
+			</ul>
+		<div>
+		<form id="form1">
+			<div data-role="fieldcontain">
+			    <fieldset data-role="controlgroup" data-type="horizontal">
+			     	<legend>Layout view:</legend>
+			         	<input type="radio" name="radio-choice-b" id="radio-choice-c" value="on" checked="checked" />
+			         	<label for="radio-choice-c">List</label>
+			         	<input type="radio" name="radio-choice-b" id="radio-choice-d" value="off" />
+			         	<label for="radio-choice-d">Grid</label>
+			         	<input type="radio" name="radio-choice-b" id="radio-choice-e" value="other" />
+			         	<label for="radio-choice-e">Gallery</label>
+			    </fieldset>
+			</div>
+			<div data-role="fieldcontain">
+			    <fieldset data-role="controlgroup" data-type="horizontal">
+			     	<legend>数据来源*：</legend>
+			         	<input type="radio" name="datasource" id="datasource-a" value="sina" checked="checked" />
+			         	<label for="datasource-a">新浪微博</label>
+			         	<input type="radio" name="datasource" id="datasource-b" value="tengxun" />
+			         	<label for="datasource-b">腾讯微博</label>
+			         	<input type="radio" name="datasource" id="datasource-c" value="baidu" />
+			         	<label for="datasource-c">百度新闻</label>
+			         	<input type="radio" name="datasource" id="datasource-d" value="shuimu"/>
+			         	<label for="datasource-d">水木论坛</label>
+			    </fieldset>
+			</div>	
+			<div data-role="fieldcontain">
+	         		<label for="keyword">查询关键字*：</label>
+				<textarea cols="40" rows="8" name="keyword" id="keyword" value=""  data-mini="true"  placeholder="请输入关键字..."></textarea>
+			</div>
+			<div data-role="fieldcontain">
+				<label for="topic" class="select">选择主题*：</label>
+				<select name="topic" id="topic">
+					<option value="card">信用卡</option>
+					<option value="rush">基金</option>
+					<option value="futures">期货</option>
+					<option value="finance">理财产品</option>
+					<option value="overnight">Overnight</option>
+				</select>
+			</div>
+		</form>
+		</div>
+		<div>
+		<form id="form2" action="#" method="get">
+			<div data-role="fieldcontain">
+			<fieldset data-role="controlgroup">
+				<legend>选择分析的内容：</legend>
+				<input type="checkbox" name="checkbox-1a" id="checkbox-1a" class="custom" />
+				<label for="checkbox-1a">情绪</label>
+
+				<input type="checkbox" name="checkbox-2a" id="checkbox-2a" class="custom" />
+				<label for="checkbox-2a">主题</label>
+
+				<input type="checkbox" name="checkbox-3a" id="checkbox-3a" class="custom" />
+				<label for="checkbox-3a">预测</label>
+
+				<input type="checkbox" name="checkbox-4a" id="checkbox-4a" class="custom" />
+				<label for="checkbox-4a">趋势</label>
+		   	 </fieldset>
+			</div>
+			<div data-role="fieldcontain">
+				<label for="topicClassify">主题类别设置：</label>
+				<textarea cols="40" rows="8" name="topicClassify" id="topicClassify" placeholder="请输入主题的类别..."></textarea>
+			</div>
+			<div data-role="fieldcontain">
+	        		 <label for="addTopic">添加类别：</label>
+	         		<textarea cols="40" rows="8" name="addTopic" id="addTopic" placeholder="请输入将要添加的类别..."></textarea>
+			</div>			
+		</form>			
+		</div>
+		<div>
+		<form id="form3" action="#" method="get">
+			<div data-role="fieldcontain">
+				<label for="datasourceRate">源数据抓取频率：</label>
+				<textarea cols="40" rows="8" name="datasourceRate" id="datasourceRate" placeholder="请输入源数据抓取频率..."></textarea>
+			</div>
+			<div data-role="fieldcontain">
+	        		 <label for="analysisRate">分析频率：</label>
+	         		<textarea cols="40" rows="8" name="analysisRate" id="analysisRate" placeholder="请输入分析频率..."></textarea>
+			</div>		
+			<div data-role="fieldcontain">
+	        		 <label for="rightRate">准确度：</label>
+	         		<textarea cols="40" rows="8" name="rightRate" id="rightRate" placeholder="请输入准确度..."></textarea>
+			</div>		
+		</form>			
+		</div>
+		<div>
+		<form id="form4" action="#" method="get">
+			<div data-role="fieldcontain">
+			<fieldset data-role="controlgroup">
+				<legend>选择报告的内容：</legend>
+				<input type="checkbox" name="report-a" id="report-a" class="custom" />
+				<label for="report-a">情绪</label>
+
+				<input type="checkbox" name="report-b" id="report-b" class="custom" />
+				<label for="report-b">主题</label>
+
+				<input type="checkbox" name="report-c" id="report-c" class="custom" />
+				<label for="report-c">预测</label>
+
+				<input type="checkbox" name="report-d" id="report-d" class="custom" />
+				<label for="report-d">趋势</label>
+
+				<input type="checkbox" name="report-e" id="report-e" class="custom" />
+				<label for="report-e">搜索</label>
+
+				<input type="checkbox" name="report-f" id="report-f" class="custom" />
+				<label for="report-f">地图预览</label>		   	
+			 </fieldset>
+			</div>	
+			<div data-role="fieldcontain">
+			
+				<button type="submit" data-theme="b" id="submit">提交配置信息</button>
+	    		
+			</div>
+		</form>				
+		</div>
+	</div>
+		<!-- End demo markup -->
+		<div class="footer demo-description">
+			<p>
+				此处主要用来配置用户基本信息。
+			</p>
+			<p>
+				The samples in this section will help get you started with the wijwizard widget.
+			</p>
+		</div>
+	</div>
+</div>

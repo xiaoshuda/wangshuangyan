@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>排行榜</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui-1.10.3.custom.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/ui.jqgrid.css" />
+    <script type="text/javascript" language="javascript" src="js/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="js/i18n/grid.locale-cn.js" ></script>
+    <script type="text/javascript" src="js/jquery.jqGrid.min.js" ></script>
+    <script type="text/javascript">
+        jQuery.jgrid.no_legacy_api = true;
+    </script>
+  
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-size: 75%;
+        }
+    </style>
+    <script type="text/javascript">
+        var mydata = [];
+        $(function () {
+            $.ajax({
+                  type:'POST',
+               // url:'../Controller',
+                url:'jsonData.html',
+		dataType:'text',
+                data:{'flag':'rank','top':'5','nick':'empty'},
+                success:function (data, textStatus, jqXHR){
+                    var order = JSON.parse(data);
+                    for(var i=1;i <= 5;i++){
+                        $('#num'+i).val(order[i-1]);
+                    }
+                   // $('#list').jqGrid('setGridState','hidden');
+                },
+                error:function (XMLHttpRequest, textStatus, errorThrown){
+                    console.log('error');
+                },
+               
+            });
+
+            jQuery("#list").jqGrid({
+                data: mydata,
+                datatype: "local",
+                height: 200,
+                rowNum: 10,
+                rowList: [10,20,30],
+                colNames:['用户','内容'],
+                colModel:[
+                    //{name:'idd',index:'idd', width:50, sorttype:"int"},
+                    {name:'nick',index:'nick',width:100, sorttype:'text'},
+                    //{name:'source',index:'source', width:100, sorttype:"text"},
+                    {name:'text',index:'text', width:450}
+                ],
+                pager: "#pager",
+                viewrecords: true,
+                caption: "提示详情",
+               onSelectRow:function (rowid,state,e){
+                            var rowData = $("#list").jqGrid("getRowData", rowid);
+                            getListContent(rowData['nick']);
+                        }
+            
+               // hiddengrid:true
+            });
+            
+        });
+        function showData(element){
+            var value = $(element).prev().val();
+            getUserContent(value);
+        }
+        function getUserContent(user){
+            $.ajax({
+                url:'weibo.html',
+               // url:'../Controller',
+                type:'POST',
+                data:{'flag':'rank','nick':user,'top':'empty'},
+                dataType:'text',
+                success:function (data, textStatus, jqXHR){
+                    eval('var weiboData = '+ data);
+                    data = weiboData['items'];
+                    $('#list').jqGrid('setGridState','visible');
+                    jQuery('#list').jqGrid('clearGridData');
+                    jQuery("#list").jqGrid('addRowData', 'idd', data);
+                    //$('#list').jqGrid('trigger','reloadGrid');
+                }
+            });
+        }
+        function getListContent(user){
+        	$("#replaytext").css("display","block");
+        }
+        function reply(){
+            var content = $('#mytext').val();
+            var rowid = $('#list').jqGrid('getGridParam','selrow');
+            if(!rowid){
+                alert('please select data!');
+                return;
+            }
+            if(content == ''){
+                alert('please write content');
+                return;
+            }
+            var rowData = $("#list").jqGrid("getRowData", rowid);
+            $.ajax({
+                //url:'../Controller?flag=reply',
+                url:'weibo.html',
+                type:'POST',
+                data:{'flag':'reply','content':content,'nick':rowData['nick']},
+				dataType:'text',   
+                success:function(data){
+                    // alert(data)
+                	$('#list').jqGrid('delRowData',rowid);
+                    $('#mytext').val('');
+                   // $('#list').jqGrid('setGridState','hidden');
+                    //jQuery('#list').jqGrid('clearGridData');
+					$("#replaytext").css("display","none");
+                }
+
+            });
+        }
+
+
+    </script>
+
+
+</head>
+<body style="background-color: #fafafa;margin-top:-15px;padding:0;font: 80%/1.45em "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;color: #333;">
+	<div style="background-color: #499dc3;height:60px;">
+	      <a href="./index.html"><img style="float:left;" src="css/img/home.png"/></a> 
+              <h1 style="text-align:center;padding-top:12px;color:white;font-size:22px;">留言排行榜<span style="float:right;"><img src="css/img/ibm-logo-white.gif"/></span></h1>
+	</div>
+	
+		<span id="rank1" style="float:left;margin-left:100px;margin-top:100px;">
+		    <div><input type="text" id="num1" readonly/><input type="button" value="提示详情" onclick="showData(this)"/></div>
+		    <div><input type="text" id="num2" readonly/><input type="button" value="提示详情" onclick="showData(this)" /></div>
+		    <div><input type="text" id="num3" readonly/><input type="button" value="提示详情" onclick="showData(this)" /></div>
+		    <div><input type="text" id="num4" readonly/><input type="button" value="提示详情" onclick="showData(this)" /></div>
+		    <div><input type="text" id="num5" readonly/><input type="button" value="提示详情" onclick="showData(this)" /></div>
+		</span>
+		<div  style="float:left;margin-top:100px;margin-left:100px;">
+			<table id="list"></table>
+			<div id="pager"></div>
+		 </div>
+         <div id="replaytext" style="display:none;margin-left:50px;">
+	<div style="margin-top:400px;margin-left:370px;"> 
+		<textarea cols="82" rows="12" name="mytext" id = 'mytext'></textarea>
+		</div>
+		<div style="text-align:center;">
+		<input type="submit" value="回复" onclick="reply()"/></div>
+       </div>
+</body>
+</html>

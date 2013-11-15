@@ -1,0 +1,31 @@
+/*此处控制grid的大小，使其自适应当前容器大小*/
+.ui-mobile .wijmo-wijgrid .wijmo-wijgrid-innercell{
+	padding:0px;
+}
+/*此处控制其头信息的样式*/
+.wijmo-wijgrid .wijmo-wijgrid-headerrow .wijmo-wijgrid-headertext{
+/*font-size:15px;*/
+text-shadow: 0 0 0 #111111;
+padding:0;
+color:black;
+}
+
+/*此处控制grid的头尾背景 background: -webkit-linear-gradient(top,grey, #fff) repeat scroll 0 0 #fff;*/
+.ui-btn-up-a{
+background: -webkit-linear-gradient(top,grey, #fff) repeat scroll 0 0 #fff;
+padding:0;
+}
+/*
+.ui-helper-clearfix:before, .ui-helper-clearfix:after{
+	clear:both;
+}*/
+/*此处控制翻页button的样式*/
+.ui-mobile .wijmo-wijpager .ui-list .wijmo-wijpager-button{
+	padding:0px;
+}
+/*此处控制尾部信息样式*/
+.wijmo-wijgrid .wijmo-wijgrid-header, .wijmo-wijgrid .wijmo-wijgrid-footer{
+padding: 0;
+background: linear-gradient(grey, #fff) repeat scroll 0 0 #2D2D2D;
+}
+

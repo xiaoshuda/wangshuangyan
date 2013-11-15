@@ -1,0 +1,47 @@
+<div data-role="appviewpage" data-title="Bar Chart">
+    <div data-role="content">
+        <div id="wijbarchart" data-role="wijbarchart" style="width: 100%; height: 400px">
+        </div>
+ <script id="scriptInit" type="text/javascript">
+    $(document).ready(function () {
+        $("#wijbarchart").wijbarchart({
+            hint: {
+                animated: "scale",
+                hideAnimated: null,
+                showAnimated: null
+            },
+            seriesList: [{
+                label: "2012 Auto Sales ",
+                legendEntry: false,
+                data: { 
+                    x: ['Ford', 'GM', 'Chrysler', 'Toyota', 'Nissan', 'Honda'], 
+                    y: [.05, .04, .21, .27, .1, .24] 
+                }
+            }],
+        });
+                      Raphael.fn.tooltip.animations.scale = function (options) {
+                               context = options.context,
+                                        bBox = context.wijGetBBox(),
+                                        w = bBox.width,
+                                        h = bBox.height;
+                               if (options.show) {
+                                        scaleSet(context, options.duration, options.easing);
+                               } else {
+                                        context.wijAnimate({ "transform": "...s0" }, options.duration, options.easing);
+                               }
+                      }
+                      function scaleSet(set, duration, easing) {
+                               $.each(set, function (i, s) {
+                                        if (s.type === "set") {
+                                                scaleSet(s, duration, easing);
+                                        } else {
+                                                var transform = s.attr("transform");
+                                                s.wijAttr("transform", "...s0");
+                                                 s.wijAnimate({ "transform": transform }, duration, easing);
+                                        }
+                               });
+                      }
+    });
+</script>
+    </div>
+</div>

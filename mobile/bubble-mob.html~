@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+    <title>Test Adapter Mobile Widgets</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--jQuery References-->
+    
+    <script src="js/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script src="js/jquery.mobile-1.2.0.min.js" type="text/javascript"></script>
+
+    <!--Theme-->
+    <link href="css/jquery.mobile-1.2.0.min.css" rel="stylesheet" type="text/css" title="rocket-jqueryui">
+
+    <!--Wijmo Widgets CSS-->
+    <link href="css/jquery.wijmo-pro.all.3.20131.7.min.css" rel="stylesheet" type="text/css">
+
+    <!--Wijmo Widgets JavaScript-->
+    <script src="js/jquery.wijmo-open.all.3.20131.7.min.js" type="text/javascript"></script>
+    <script src="js/jquery.wijmo-pro.all.3.20131.7.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+		$(document).ready(function () {
+			var data2010 = [{
+				label: "China",
+				legendEntry: true,
+				data: { y: [73], x: [7931], y1: [1340] }
+			}, {
+				label: "India",
+				legendEntry: true,
+				data: { y: [65], x: [2972], y1: [1150] }
+			}, {
+				label: "USA",
+				legendEntry: true,
+				data: { y: [78], x: [42066], y1: [309] }
+			}, {
+				label: "Japan",
+				legendEntry: true,
+				data: { y: [83], x: [30866], y1: [126] }
+			}, {
+				label: "Russia",
+				legendEntry: true,
+				data: { y: [69], x: [14318], y1: [140] }
+			}, {
+				label: "Congo",
+				legendEntry: true,
+				data: { y: [48], x: [374], y1: [72] }
+			}, {
+				label: "South Africa",
+				legendEntry: true,
+				data: { y: [52], x: [9284], y1: [43] }
+			}, {
+				label: "Mexico",
+				legendEntry: true,
+				data: { y: [77], x: [11754], y1: [112] }
+			}, {
+				label: "UK",
+				legendEntry: true,
+				data: { y: [80], x: [31217], y1: [61] }
+			}];
+
+			var data1910 = [{
+				label: "China",
+				legendEntry: true,
+				data: { y: [32], x: [810], y1: [423] }
+			}, {
+				label: "India",
+				legendEntry: true,
+				data: { y: [23], x: [692], y1: [249] }
+			}, {
+				label: "USA",
+				legendEntry: true,
+				data: { y: [52], x: [7914], y1: [93] }
+			}, {
+				label: "Japan",
+				legendEntry: true,
+				data: { y: [40], x: [1883], y1: [50] }
+			}, {
+				label: "Russia",
+				legendEntry: true,
+				data: { y: [36], x: [1842], y1: [80] }
+			}, {
+				label: "Congo",
+				legendEntry: true,
+				data: { y: [32], x: [602], y1: [11] }
+			}, {
+				label: "South Africa",
+				legendEntry: true,
+				data: { y: [34], x: [2864], y1: [5.9] }
+			}, {
+				label: "Mexico",
+				legendEntry: true,
+				data: { y: [27], x: [2102], y1: [15] }
+			}, {
+				label: "UK",
+				legendEntry: true,
+				data: { y: [54], x: [6489], y1: [42] }
+			}];
+
+			$("#wijbubblechart").wijbubblechart({
+				showChartLabels: false,
+				axis: {
+					y: {
+						text: "Life Expectancy",
+						autoMin: false,
+						autoMax: false,
+						min: 0,
+						max: 100
+					},
+					x: {
+						text: "Income",
+						autoMin: false,
+						autoMax: false,
+						min: 0,
+						max: 45000
+					}
+				},
+				hint: {
+					content: function () {
+						return "" + this.data.label + " \nLife Expectency: " + this.y + " \nIncome: " + Globalize.format(this.x, "n") + " \nPopulation: " + this.data.y1 + "M";
+					}
+				},
+				header: {
+					text: "Wealth & Health of Nations - 2010"
+				},
+				seriesList: data2010
+			});
+
+
+			$("#Btn1910").click(function () {
+				$("#wijbubblechart")
+					.wijbubblechart("option", "header", { text: "Wealth & Health of Nations - 1910" })
+					.wijbubblechart("option", "seriesList", data1910);
+
+			});
+			$("#Btn2010").click(function () {
+				$("#wijbubblechart")
+					.wijbubblechart("option", "header", { text: "Wealth & Health of Nations - 2010" })
+					.wijbubblechart("option", "seriesList", data2010);
+
+			});
+		});
+	</script>
+</head>
+<body class="ui-mobile-viewport ui-overlay-b">
+    <div data-role="page" data-theme="b" tabindex="0" class="ui-page ui-body-b ui-page-active" style="min-height: 537px;">
+        
+	
+	<div data-role="content" role="main">
+            <div id="accordion" data-role="wijaccordion" class="wijmo-wijaccordion ui-widget wijmo-wijaccordion-icons ui-helper-clearfix wijmo-wijaccordion-bottom" role="tablist">
+			
+                
+                    <h3 class="wijmo-wijaccordion-header ui-btn-active ui-corner-top" role="tab" aria-expanded="true" tabindex="0">
+                        <span class="ui-icon ui-icon-arrow-d"></span><a href="#" class="ui-link">First</a></h3>
+                    <div role="tabpanel" class="ui-corner-bottom wijmo-wijaccordion-content ui-body ui-body-c wijmo-wijaccordion-content-active" style="-webkit-transform: none; overflow: auto; padding-top: 16px; padding-bottom: 16px;">
+                        <p>
+                            Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque.
+                            Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a
+                            nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada.
+                            Vestibulum a velit eu ante scelerisque vulputate.
+                        </p>
+                    </div>
+                
+                
+                    <h3 class="wijmo-wijaccordion-header ui-btn-up-a ui-corner-all" role="tab" aria-expanded="false" tabindex="-1">
+                        <span class="ui-icon ui-icon-arrow-r"></span><a href="#" class="ui-link">Second</a></h3>
+                    <div role="tabpanel" class="wijmo-wijaccordion-content ui-body ui-body-c" style="display: none;">
+                        <p>
+                            Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus. Vivamus
+                            hendrerit, dolor at aliquet laoreet, mauris turpis porttitor velit, faucibus interdum
+                            tellus libero ac justo. Vivamus non quam. In suscipit faucibus urna.
+                        </p>
+                    </div>
+                    
+            </div>
+		<div id="wijbubblechart" data-role="wijbarchart" style="width: 100%; height: 400px">
+		<div class="togbuttons">
+				<button id="Btn1910">
+					1910</button>
+				<button id="Btn2010">
+					2010</button>
+		</div>
+        </div>	
+			
+        </div>
+		
+    </div>
+
+
+</body></html>
