@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Three框架</title>
+    <script src="lib/jquery-1.8.3.min.js"></script>
+	<script src="lib/three.js"></script>
+	<script src="lib/Detector.js"></script>
+	<script src="lib/Coordinates.js"></script>
+	<script src="lib/OrbitAndPanControls.js"></script>
+	<script src="lib/TrackballControls.js"></script>
+	<script src="lib/uclass_TeapotGeometry.js"></script>
+	<script src="lib/uclass_TeacupGeometry.js"></script>
+	<script src="lib/uclass_TeaspoonGeometry.js"></script>
+	<script src="lib/uclass_BeveledBlockGeometry.js"></script>
+	<script src="lib/uclass_shaders.js"></script>
+	<script src="lib/stats.min.js"></script>
+	<script src="lib/dat.gui.min.js"></script>
+	<script src="lib/tween.min.js"></script>
+	<script src="lib/sprintf.js"></script>
+    <script src="lib/Data.js"></script>
+
+
+    <style type="text/css">
+        div#canvas-frame {
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            height: 600px;
+            background-color: #EEEEEE;
+        }
+        .describe{
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 300px;
+            height: 200px;
+            background-color: #000;
+            z-index: 9;
+            color:white;
+            font-size: 12px;
+        }
+        .header{
+            text-align: center;
+            font-size: 18px;
+            line-height: 50px;
+            height: 50px;
+        }
+        .odby{
+            height: 30px;
+            line-height: 30px;
+        }
+
+    </style>
+    <script>
+        var camera;
+        var scene;
+        var light;
+        var renderer;
+        var cameraControls;
+        var clock = new THREE.Clock();
+        var objects = [];
+        var eyeTargetScale;
+        function initThree() {
+            width = document.getElementById('canvas-frame').clientWidth;
+            height = document.getElementById('canvas-frame').clientHeight;
+            renderer = new THREE.WebGLRenderer({
+                antialias : true
+            });
+            renderer.setSize(width, height);
+			var container = document.getElementById('canvas-frame');
+            container.appendChild(renderer.domElement);
+			// STATS
+			stats = new Stats();
+			stats.setMode( 0 );
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.top = '0px';
+			stats.domElement.style.zIndex = 100;
+			container.appendChild( stats.domElement );
+
+			stats.domElement.children[ 0 ].children[ 0 ].style.color = "#aaa";
+			stats.domElement.children[ 0 ].style.background = "transparent";
+			stats.domElement.children[ 0 ].children[ 1 ].style.display = "none";
+			
+            renderer.setClearColorHex(0xFFFFFF, 1.0);
+        }
+
+        function initCamera() {
+            canvasWidth = window.innerWidth;
+            canvasHeight = window.innerHeight;
+            var canvasRatio = canvasWidth / canvasHeight;
+
+            camera = new THREE.PerspectiveCamera( 45, canvasRatio, 1, 100000 );
+            camera.position.set( -6000, -6000, 6000 );
+
+            // CONTROLS
+            cameraControls = new THREE.TrackballControls(camera, renderer.domElement);
+            cameraControls.target.set(0,0,0);
+
+            projector = new THREE.Projector();
+		
+		}
+        function initScene() {
+            scene = new THREE.Scene();
+        }
+
+        function initLight() {
+
+            light = new THREE.PointLight( 0xFFFFFF, 1.0 );
+            scene.add( light );
+
+        }
+
+
+        function initObject() {
+            var lineDis = timelineConfig.spacing;
+            var radius = 10;
+            for(var t=1;t<10;t++){
+                var x = 5000*timelineConfig.timelineX+lineDis*t;
+                var y = 5000*timelineConfig.timelineY-lineDis*t;
+                var z = 5000*timelineConfig.timelineZ;
+                var geometryt = new THREE.Geometry();
+                geometryt.vertices.push( new THREE.Vector3( lineDis*t,-lineDis*t,0 ) );
+                geometryt.vertices.push( new THREE.Vector3(x ,y ,z ) );
+                var line = new THREE.Line( geometryt, new THREE.LineBasicMaterial( { color:0x000000,linewidth:2 } ) );
+                scene.add(line);
+            }
+			var lineNum = 0;
+            for(var j=0;j<26;j+=3){
+                var geometry = new THREE.Geometry();
+                for( var i=1000;i<=5000;i++){
+                    var x = dataJs[j][i]+timelineConfig.timelineX*(i-1000)+lineDis*lineNum;
+                    var y = dataJs[j+1][i]+timelineConfig.timelineY*(i-1000)-lineDis*lineNum;
+                    var z = dataJs[j+2][i]+timelineConfig.timelineZ*(i-1000);
+                    geometry.vertices.push( new THREE.Vector3( x,y ,z ) );
+                    // MODELS
+                    if(i%400 == 0){
+                        var sphere = new THREE.Mesh(
+                            new THREE.SphereGeometry( 30 ),
+                            new THREE.MeshPhongMaterial( { color: 'black' } ) );
+
+                        sphere.position.x = x;
+                        sphere.position.y = y;
+                        sphere.position.z = z;
+
+                        scene.add( sphere );
+                    }
+                }
+                var newColor =[0x4B0082,0x9370DB,0x0000FF,0x4682B4,0x5F9EA0,0x008080,0x90EE90,'darkgreen','yellow'];
+                var material = new THREE.LineBasicMaterial({
+                    color:newColor[lineNum],
+                    linewidth:5
+                });
+                var line = new THREE.Line( geometry,  material);
+                scene.add( line );
+                objects.push( line );
+                lineNum++;
+            }
+        }
+
+        function threeStart() {
+            initThree();
+            initCamera();
+            initScene();
+            setupGui();
+            initLight();
+            initObject();
+            drawHelpers();
+            animation();
+        }
+
+        // 获取当前窗口url中param参数的值
+        function get_param(param){
+            var query = location.search.substring(1).split('&');
+            for(var i=0;i<query.length;i++){
+                var kv = query[i].split('=');
+                if(kv[0] == param){
+                    return kv[1];
+                }
+            }
+            return null;
+        }
+                
+        var timelineControl = function() {
+            var x = get_param('x');
+            var y = get_param('y');
+            var z = get_param('z');
+            var s = get_param('s');
+            this.timelineX = parseInt(x?x:5);
+            this.timelineY = parseInt(y?y:5);
+            this.timelineZ = parseInt(z?z:5);
+            this.spacing = parseInt(s?s:200);
+            this.change = function(){
+                var query = '?x='+this.timelineX+'&y='+this.timelineY+'&z='+this.timelineZ+'&s='+this.spacing;
+                window.location.search = query;
+            };
+        };
+
+        function setupGui(){
+            var text = new timelineControl();
+            var gui = new dat.GUI();
+            gui.add(text, 'timelineX').step(1);
+            gui.add(text, 'timelineY').step(1);
+            gui.add(text, 'timelineZ').step(1);
+            gui.add(text, 'spacing').min(0).step(1);
+            gui.add(text, 'change');
+            timelineConfig = text;
+        };        
+        function drawHelpers() {
+            Coordinates.drawGrid({size:10000,scale:0.01,orientation:'z'});
+            Coordinates.drawAllAxes({axisLength:6000,axisRadius:50,axisTess:50});
+        }
+
+        function animation()
+        {
+            animationId = window.requestAnimationFrame(animation);
+            render();
+        }
+        function render() {
+            var delta = clock.getDelta();
+            cameraControls.update(delta);
+
+            light.position.copy( camera.position );
+			stats.update();
+            renderer.render(scene, camera);
+        }
+
+        
+    </script>
+</head>
+
+<body onload="threeStart();">
+<div id="canvas-frame"></div>
+<div class="describe">
+    <div class="header">波形指南</div>
+    <div>
+        <div class="odby">坐标轴蓝色线条：Z轴</div>
+        <div class="odby">坐标轴绿色条：Y轴</div>
+        <div class="odby">坐标轴红色线条：X轴</div>
+        <div class="odby">波形图上两个黑色小球之间的时间间隔为：100ms</div>
+    </div>
+</div>
+</body>
+</html>
