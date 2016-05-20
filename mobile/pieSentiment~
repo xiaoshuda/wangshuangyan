@@ -1,6 +1,0 @@
-{totalResultsCount:8443565,company:[{label: "正面",legendEntry: true,data: 5.6,offset: 30}, 
-				{label: "中性",legendEntry: true,data: 56.36,offset: 0},
-				{label: "负面",legendEntry: true,data: 16.67,offset: 0}],
-			industry:[{ label: "正面", legendEntry: true, data: 30, offset: 30 }, 
-				{label: "中性", legendEntry: true, data: 12, offset: 0 }, 
-				{ label: "一般", legendEntry: true, data: 6, offset: 0 }]}
